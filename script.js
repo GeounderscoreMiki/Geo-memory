@@ -1,138 +1,232 @@
-// Billederne i spillet
+// ===================================
+// GEOCACHE-KOORDINAT
+// ===================================
+//
+// Du kan ændre koordinatet her senere.
+// Skriv koordinatet mellem citationstegnene.
+const geocacheKoordinat = "N 55° 12.345 E 012° 34.567";
+
+
+// ===================================
+// BILLEDER TIL DE 10 PAR
+// ===================================
+
 const billeder = [
-    'vendespil1.png',
-    'vendespil2.png',
-    'vendespil3.png',
-    'vendespil4.png',
-    'vendespil5.png',
-    'vendespil6.png',
-    'vendespil7.png',
-    'vendespil8.png',
-    'vendespil9.png',
-    'vendespil10.png'
+    "vendespil1.png",
+    "vendespil2.png",
+    "vendespil3.png",
+    "vendespil4.png",
+    "vendespil5.png",
+    "vendespil6.png",
+    "vendespil7.png",
+    "vendespil8.png",
+    "vendespil9.png",
+    "vendespil10.png"
 ];
 
-// Vi skal have 2 af hvert billede = 10 par = 20 kort
-const kortene = [];
-for (let i = 0; i < billeder.length; i++) {
-    kortene.push(billeder[i]);
-    kortene.push(billeder[i]);
-}
 
-// Bland kortene
-function blandKortene(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
+// ===================================
+// LAV 20 KORT
+// 10 forskellige billeder x 2
+// ===================================
 
-// Spillets variabler
-let korteBlandetOgKlare = blandKortene([...kortene]);
+const alleKort = [];
+
+billeder.forEach(function (billede) {
+    alleKort.push(billede);
+    alleKort.push(billede);
+});
+
+
+// ===================================
+// SPILLETS VARIABLER
+// ===================================
+
+let blandedeKort = [];
 let førsteKort = null;
 let andetKort = null;
-let forsog = 0;
+let forsøg = 0;
 let parFundet = 0;
+let spilLåst = false;
 
-// Find HTML-elementer
-const spilleplade = document.getElementById('spilleplade');
-const forsogElement = document.getElementById('forsog');
-const parFundetElement = document.getElementById('par-fundet');
-const startIgenBtn = document.getElementById('start-igen');
-const beskedElement = document.getElementById('besked');
 
-// Opret kortene på siden
-function opretKorte() {
-    spilleplade.innerHTML = '';
-    
-    korteBlandetOgKlare.forEach((billede, index) => {
-        const kort = document.createElement('div');
-        kort.classList.add('kort');
+// ===================================
+// FIND ELEMENTERNE FRA HTML
+// ===================================
+
+const spilleplade = document.getElementById("spilleplade");
+const forsøgElement = document.getElementById("forsog");
+const parFundetElement = document.getElementById("par-fundet");
+const startIgenKnap = document.getElementById("start-igen");
+const beskedElement = document.getElementById("besked");
+
+
+// ===================================
+// BLAND KORTENE
+// ===================================
+
+function blandKortene(kort) {
+    for (let i = kort.length - 1; i > 0; i--) {
+        const tilfældigPlads = Math.floor(Math.random() * (i + 1));
+
+        [kort[i], kort[tilfældigPlads]] = [
+            kort[tilfældigPlads],
+            kort[i]
+        ];
+    }
+
+    return kort;
+}
+
+
+// ===================================
+// OPRET ALLE KORT PÅ SIDEN
+// ===================================
+
+function opretSpillet() {
+    spilleplade.innerHTML = "";
+
+    førsteKort = null;
+    andetKort = null;
+    spilLåst = false;
+
+    blandedeKort = blandKortene([...alleKort]);
+
+    blandedeKort.forEach(function (billede) {
+        const kort = document.createElement("div");
+
+        kort.classList.add("kort");
         kort.dataset.billede = billede;
-        kort.dataset.index = index;
-        
+
         kort.innerHTML = `
             <div class="kort-indhold">
+
                 <div class="kort-bag">
-                    <img src="geocaching-logo.png" alt="Bagside">
+                    <img src="geocaching-logo.png" alt="Bagside af kort">
                 </div>
+
                 <div class="kort-foran">
-                    <img src="${billede}" alt="Spillekort">
+                    <img src="${billede}" alt="Billede fra naturen">
                 </div>
+
             </div>
         `;
-        
-        kort.addEventListener('click', () => vendKort(kort));
+
+        kort.addEventListener("click", function () {
+            vendKort(kort);
+        });
+
         spilleplade.appendChild(kort);
     });
 }
 
-// Vend et kort
+
+// ===================================
+// NÅR ET KORT BLIVER VENDT
+// ===================================
+
 function vendKort(kort) {
-    // Hvis kortet allerede er drejet eller både førsteKort og andetKort er valgt
-    if (kort.classList.contains('vent') || kort.classList.contains('ramt')) {
+    if (spilLåst) {
         return;
     }
-    
-    if (førsteKort && andetKort) {
+
+    if (kort.classList.contains("vent")) {
         return;
     }
-    
-    // Drej kortet
-    kort.classList.add('vent');
-    
-    if (!førsteKort) {
+
+    if (kort.classList.contains("ramt")) {
+        return;
+    }
+
+    if (førsteKort !== null && andetKort !== null) {
+        return;
+    }
+
+    kort.classList.add("vent");
+
+    if (førsteKort === null) {
         førsteKort = kort;
-    } else {
-        andetKort = kort;
-        forsog++;
-        forsogElement.textContent = forsog;
-        
-        // Tjek hvis de matcher
-        setTimeout(tjekMatch, 600);
+        return;
     }
+
+    andetKort = kort;
+    forsøg++;
+
+    forsøgElement.textContent = forsøg;
+
+    tjekOmKorteneMatcher();
 }
 
-// Tjek hvis de to kort matcher
-function tjekMatch() {
-    const match = førsteKort.dataset.billede === andetKort.dataset.billede;
-    
-    if (match) {
-        // De matcher - lad dem blive vendt
-        førsteKort.classList.add('ramt');
-        andetKort.classList.add('ramt');
-        parFundet++;
-        parFundetElement.textContent = parFundet;
-        
-        // Tjek hvis alle par er fundet
-        if (parFundet === 10) {
-            beskedElement.textContent = `🎉 Tillykke! Du fandt alle 10 par på ${forsog} forsøg!`;
-            beskedElement.style.color = '#6b8e23';
+
+// ===================================
+// TJEK OM DE TO KORT ER ENS
+// ===================================
+
+function tjekOmKorteneMatcher() {
+    spilLåst = true;
+
+    setTimeout(function () {
+        const korteneMatcher =
+            førsteKort.dataset.billede === andetKort.dataset.billede;
+
+        if (korteneMatcher) {
+            førsteKort.classList.add("ramt");
+            andetKort.classList.add("ramt");
+
+            parFundet++;
+            parFundetElement.textContent = parFundet;
+
+            if (parFundet === 10) {
+                visTillykkeBesked();
+            }
+        } else {
+            førsteKort.classList.remove("vent");
+            andetKort.classList.remove("vent");
         }
-    } else {
-        // De matcher ikke - drej dem tilbage
-        førsteKort.classList.remove('vent');
-        andetKort.classList.remove('vent');
-    }
-    
-    // Nulstil
-    førsteKort = null;
-    andetKort = null;
+
+        førsteKort = null;
+        andetKort = null;
+        spilLåst = false;
+    }, 800);
 }
 
-// Start spillet igen
-startIgenBtn.addEventListener('click', () => {
-    korteBlandetOgKlare = blandKortene([...kortene]);
-    førsteKort = null;
-    andetKort = null;
-    forsog = 0;
+
+// ===================================
+// BESKED NÅR SPILLET ER GENNEMFØRT
+// ===================================
+
+function visTillykkeBesked() {
+    beskedElement.innerHTML = `
+        🎉 <strong>Tillykke!</strong> 🎉<br>
+        Du fandt alle 10 par på ${forsøg} forsøg.<br><br>
+
+        🌿 Du har låst op for en geocache!<br>
+        🧭 Koordinat:<br>
+        <strong>${geocacheKoordinat}</strong>
+    `;
+
+    beskedElement.style.color = "#315c36";
+}
+
+
+// ===================================
+// START SPILLET FORFRA
+// ===================================
+
+startIgenKnap.addEventListener("click", function () {
+    forsøg = 0;
     parFundet = 0;
-    forsogElement.textContent = '0';
-    parFundetElement.textContent = '0';
-    beskedElement.textContent = '';
-    opretKorte();
+
+    forsøgElement.textContent = "0";
+    parFundetElement.textContent = "0";
+    beskedElement.innerHTML = "";
+
+    opretSpillet();
 });
 
-// Start spillet når siden loader
-opretKorte();
+
+// ===================================
+// START SPILLET FØRSTE GANG
+// ===================================
+
+opretSpillet();

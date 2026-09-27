@@ -196,16 +196,24 @@ function tjekOmKorteneMatcher() {
 // ===================================
 
 function visTillykkeBesked() {
-    beskedElement.innerHTML = `
-        🎉 <strong>Tillykke!</strong> 🎉<br>
-        Du fandt alle 10 par på ${forsøg} forsøg.<br><br>
+    if (forsøg <= 20) {
+        beskedElement.innerHTML = `
+            🎉 <strong>Tillykke!</strong> 🎉<br>
+            Du fandt alle 10 par på ${forsøg} forsøg.<br><br>
 
-        🌿 Du har låst op for en geocache!<br>
-        🧭 Koordinat:<br>
-        <strong>${geocacheKoordinat}</strong>
-    `;
-
-    beskedElement.style.color = "#315c36";
+            🌿 Du har låst op for en geocache!<br>
+            🧭 Koordinat:<br>
+            <strong>${geocacheKoordinat}</strong>
+        `;
+        beskedElement.style.color = "#315c36";
+    } else {
+        beskedElement.innerHTML = `
+            Du fandt alle 10 par på ${forsøg} forsøg.<br><br>
+            Desværre kræver belønningen højst 20 forsøg.<br>
+            Prøv igen og se om du kan klare det hurtigere 🌿
+        `;
+        beskedElement.style.color = "#8a4b2a";
+    }
 }
 
 

@@ -196,7 +196,7 @@ function tjekOmKorteneMatcher() {
 // ===================================
 
 function visTillykkeBesked() {
-    if (forsøg <= 20) {
+    if (forsøg <= 30) {
         beskedElement.innerHTML = `
             🎉 <strong>Tillykke!</strong> 🎉<br>
             Du fandt alle 10 par på ${forsøg} forsøg.<br><br>
@@ -209,7 +209,7 @@ function visTillykkeBesked() {
     } else {
         beskedElement.innerHTML = `
             Du fandt alle 10 par på ${forsøg} forsøg.<br><br>
-            Desværre kræver belønningen højst 20 forsøg.<br>
+            Desværre kræver belønningen højst 30 forsøg.<br>
             Prøv igen og se om du kan klare det hurtigere 🌿
         `;
         beskedElement.style.color = "#8a4b2a";

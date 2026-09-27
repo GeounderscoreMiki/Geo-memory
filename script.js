@@ -4,7 +4,7 @@
 //
 // Du kan ændre koordinatet her senere.
 // Skriv koordinatet mellem citationstegnene.
-const geocacheKoordinat = "N 55° 12.345 E 012° 34.567";
+const geocacheKoordinat = "N 55° 21.729 E 010° 35.533";
 
 
 // ===================================

@@ -13,15 +13,15 @@ const geocacheKoordinat = "N 55° 12.345 E 012° 34.567";
 
 const billeder = [
     "vendespil1.png",
-    "vendespil2.png",
-    "vendespil3.png",
-    "vendespil4.png",
-    "vendespil5.png",
-    "vendespil6.png",
-    "vendespil7.png",
-    "vendespil8.png",
-    "vendespil9.png",
-    "vendespil10.png"
+    "Vendespil2.png",
+    "Vendespil3.png",
+    "Vendespil4.png",
+    "Vendespil5.png",
+    "Vendespil6.png",
+    "Vendespil7.png",
+    "Vendespil8.png",
+    "Vendespil9.png",
+    "Vendespil10.png"
 ];
 
 

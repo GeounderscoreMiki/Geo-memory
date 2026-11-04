@@ -86,7 +86,7 @@ function blandKortene(kort) {
 // Uses the free service abacus.jasoncameron.dev.
 // Change "geo-memory-english-miki" if you want a fresh counter starting at 0.
 const counterUrl = "https://abacus.jasoncameron.dev";
-const counterName = "geo-memory-english-miki/solved";
+const counterName = "geo-memory-english-miki-2/solved";
 
 const solvedElement = document.getElementById("solved-count");
 
@@ -94,7 +94,7 @@ function showCounter(url) {
     fetch(url)
         .then(function (response) { return response.json(); })
         .then(function (data) {
-            solvedElement.textContent = data.value;
+            solvedElement.textContent = data.value || 0;
         })
         .catch(function () {
             solvedElement.textContent = "?";

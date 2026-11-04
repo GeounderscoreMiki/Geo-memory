@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Geo-Memory</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <h1>🌲 Geo-Memory 🧭</h1>
+
+        <p>
+            Find all 10 pairs from the world of nature and geocaching
+        </p>
+    </header>
+
+    <main class="container">
+
+        <section class="scoreboard">
+            <p>
+                Attempts:
+                <span id="forsog">0</span>
+            </p>
+
+            <p>
+                Pairs found:
+                <span id="par-fundet">0</span> / 10
+            </p>
+        </section>
+
+        <section
+            id="spilleplade"
+            class="spilleplade"
+            aria-label="Memory game">
+        </section>
+
+        <button id="start-igen" type="button">
+            Play again
+        </button>
+
+        <p id="besked" aria-live="polite"></p>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

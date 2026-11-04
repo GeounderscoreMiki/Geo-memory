@@ -4,7 +4,7 @@
 //
 // You can change the coordinates here later.
 // Write the coordinates between the quotation marks.
-const geocacheKoordinat = "N 55° 21.729 E 010° 35.533";
+const geocacheKoordinat = "N 55° 59.027 E 013° 34.468";
 
 
 // ===================================

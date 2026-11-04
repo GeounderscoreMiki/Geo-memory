@@ -80,6 +80,32 @@ function blandKortene(kort) {
 
 
 // ===================================
+// COUNTER: HOW MANY TIMES THE GAME HAS BEEN SOLVED
+// ===================================
+//
+// Uses the free service abacus.jasoncameron.dev.
+// Change "geo-memory-english-miki" if you want a fresh counter starting at 0.
+const counterUrl = "https://abacus.jasoncameron.dev";
+const counterName = "geo-memory-english-miki/solved";
+
+const solvedElement = document.getElementById("solved-count");
+
+function showCounter(url) {
+    fetch(url)
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            solvedElement.textContent = data.value;
+        })
+        .catch(function () {
+            solvedElement.textContent = "?";
+        });
+}
+
+// Show the current number when the page loads
+showCounter(counterUrl + "/get/" + counterName);
+
+
+// ===================================
 // CREATE ALL CARDS ON THE PAGE
 // ===================================
 
@@ -196,6 +222,9 @@ function tjekOmKorteneMatcher() {
 // ===================================
 
 function visTillykkeBesked() {
+    // Add 1 to the counter and show the new number
+    showCounter(counterUrl + "/hit/" + counterName);
+
     if (forsøg <= 30) {
         beskedElement.innerHTML = `
             🎉 <strong>Congratulations!</strong> 🎉<br>
